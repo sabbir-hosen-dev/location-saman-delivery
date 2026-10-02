@@ -16,3 +16,22 @@ button, input, textarea, select { font: inherit; }
   .container-width { width: min(100% - 28px, 1120px); }
   .section-space { padding-block: 54px; }
 }
+
+
+
+@keyframes productSlide {
+  0% {
+    opacity: 0;
+    transform: translateX(25px) scale(0.98);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+}
+
+.animate-product-slide {
+  animation: productSlide 0.6s ease-out;
+}
+

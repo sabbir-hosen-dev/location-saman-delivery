@@ -5,7 +5,7 @@ export const products = [
   {
     id: 1,
     name: 'চিনি',
-    description: 'সব চিনি মিষ্টি না রে পাগলা...R7',
+    description: 'সব চিনি মিষ্টি না রে পাগলা.!!',
     price: '৩০০',
     priceTitle: 'করে ১ গ্রাম',
     tag: 'জনপ্রিয়',
@@ -14,7 +14,7 @@ export const products = [
   {
     id: 2,
     name: 'কেন্ডি',
-    description: 'যে নামাইছে লেয়ার সেই জানে কেন্ডির কি পাওয়ার ',
+    description: 'যে নামাইছে লেয়ার সেই জানে কেন্ডির কি পাওয়ার...R7 ',
     price: '৫০',
     tag: 'নতুন',
     priceTitle: 'করে ১ পিস',
