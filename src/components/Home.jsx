@@ -115,7 +115,8 @@ export default function Home() {
               </div>
 
               <p className="font-bangla mt-1 text-xs text-slate-500">
-                WhatsApp Business-এ
+                সামান আপনার, দায়িত্ব আমাদের।
+
               </p>
             </div>
 
