@@ -5,7 +5,7 @@ export const products = [
   {
     id: 1,
     name: 'চিনি',
-    description: 'দৈনন্দিন ব্যবহার ও ভ্রমণের জন্য টেকসই বোতল।',
+    description: 'সব চিনি মিষ্টি না রে পাগলা...R7',
     price: '৩০০',
     priceTitle: 'করে ১ গ্রাম',
     tag: 'জনপ্রিয়',
@@ -14,7 +14,7 @@ export const products = [
   {
     id: 2,
     name: 'কেন্ডি',
-    description: 'স্বচ্ছ সাউন্ড ও আরামদায়ক ব্যবহারের অভিজ্ঞতা।',
+    description: 'যে নামাইছে লেয়ার সেই জানে কেন্ডির কি পাওয়ার ',
     price: '৫০',
     tag: 'নতুন',
     priceTitle: 'করে ১ পিস',
@@ -23,7 +23,7 @@ export const products = [
   {
     id: 3,
     name: 'পাতা',
-    description: 'স্টাইলিশ ডিজাইন, প্রয়োজনীয় ফিচার একসঙ্গে।',
+    description: 'দুঃখ ভুলালানোর ঔষধ, পিনিক',
     price: '২০০',
     tag: 'ট্রেন্ডিং',
     priceTitle: ' ১৫ গ্রাম',
