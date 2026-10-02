@@ -1,0 +1,18 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root { font-family: Inter, 'Hind Siliguri', sans-serif; color: #172b26; background: #fff; font-synthesis: none; text-rendering: optimizeLegibility; }
+html { scroll-behavior: smooth; scroll-padding-top: 90px; }
+body { margin: 0; min-width: 320px; }
+button, input, textarea, select { font: inherit; }
+::selection { background: #c9f1df; color: #07543e; }
+.font-bangla { font-family: 'Hind Siliguri', sans-serif; }
+.container-width { width: min(1120px, calc(100% - 40px)); margin-inline: auto; }
+.section-space { padding-block: 76px; }
+.section-kicker { display: inline-flex; align-items: center; gap: 8px; color: #087f5b; font-weight: 700; font-size: 13px; letter-spacing: .02em; }
+.section-kicker::before { content: ''; width: 22px; height: 2px; background: #087f5b; border-radius: 999px; }
+@media (max-width: 640px) {
+  .container-width { width: min(100% - 28px, 1120px); }
+  .section-space { padding-block: 54px; }
+}
