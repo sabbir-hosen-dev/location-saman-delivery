@@ -8,6 +8,7 @@ import Contact from './components/Contact.jsx';
 import OrderRules from './components/OrderRules.jsx';
 import Footer from './components/Footer.jsx';
 import { initialReviews, WHATSAPP_NUMBER } from './data/siteData.js';
+import FixedSeftyNotice from './components/FixedSeftyNotice.jsx';
 
 export default function App() {
   const [reviews, setReviews] = useState(initialReviews);
@@ -22,6 +23,9 @@ export default function App() {
         <Reviews reviews={reviews} setReviews={setReviews} />
         <Contact />
         <OrderRules />
+        <FixedSeftyNotice />
+   
+        
       </main>
       <Footer />
       <a
