@@ -1,5 +1,5 @@
 
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { Send, Star, ChevronLeft, ChevronRight } from 'lucide-react'
 import SectionTitle from './SectionTitle.jsx'
 
@@ -15,6 +15,10 @@ export default function Reviews({ reviews, setReviews }) {
 
   const [notice, setNotice] = useState('')
   const [currentReview, setCurrentReview] = useState(0)
+
+  // Swipe related
+  const touchStartX = useRef(0)
+  const touchEndX = useRef(0)
 
   // LocalStorage থেকে review load
   useEffect(() => {
@@ -60,8 +64,6 @@ export default function Reviews({ reviews, setReviews }) {
     ]
 
     setReviews(updatedReviews)
-
-    // নতুন review যোগ হলে প্রথম review দেখাবে
     setCurrentReview(0)
 
     setForm({
@@ -78,12 +80,12 @@ export default function Reviews({ reviews, setReviews }) {
     }, 3000)
   }
 
-  // সর্বোচ্চ 4টি review slider-এ দেখাবে
+  // সর্বোচ্চ 4টি review
   const sliderReviews = reviews.slice(0, 4)
 
   // Next review
   const nextReview = () => {
-    if (sliderReviews.length === 0) return
+    if (sliderReviews.length <= 1) return
 
     setCurrentReview(prev =>
       prev === sliderReviews.length - 1 ? 0 : prev + 1
@@ -92,11 +94,73 @@ export default function Reviews({ reviews, setReviews }) {
 
   // Previous review
   const previousReview = () => {
-    if (sliderReviews.length === 0) return
+    if (sliderReviews.length <= 1) return
 
     setCurrentReview(prev =>
       prev === 0 ? sliderReviews.length - 1 : prev - 1
     )
+  }
+
+  // =========================
+  // TOUCH SWIPE
+  // =========================
+
+  const handleTouchStart = e => {
+    touchStartX.current = e.touches[0].clientX
+    touchEndX.current = e.touches[0].clientX
+  }
+
+  const handleTouchMove = e => {
+    touchEndX.current = e.touches[0].clientX
+  }
+
+  const handleTouchEnd = () => {
+    const distance =
+      touchStartX.current - touchEndX.current
+
+    // Minimum swipe distance
+    if (Math.abs(distance) < 50) return
+
+    if (distance > 0) {
+      // Swipe Left
+      nextReview()
+    } else {
+      // Swipe Right
+      previousReview()
+    }
+  }
+
+  // =========================
+  // MOUSE DRAG
+  // =========================
+
+  const mouseStartX = useRef(0)
+  const isDragging = useRef(false)
+
+  const handleMouseDown = e => {
+    mouseStartX.current = e.clientX
+    isDragging.current = true
+  }
+
+  const handleMouseUp = e => {
+    if (!isDragging.current) return
+
+    const distance =
+      mouseStartX.current - e.clientX
+
+    isDragging.current = false
+
+    if (Math.abs(distance) < 50) return
+
+    if (distance > 0) {
+      nextReview()
+    } else {
+      previousReview()
+    }
+  }
+
+  const handleMouseLeave = () => {
+    isDragging.current = false
   }
 
   // Auto slider
@@ -111,6 +175,16 @@ export default function Reviews({ reviews, setReviews }) {
 
     return () => clearInterval(interval)
   }, [sliderReviews.length])
+
+  // Review কমে গেলে current index ঠিক রাখা
+  useEffect(() => {
+    if (
+      sliderReviews.length > 0 &&
+      currentReview >= sliderReviews.length
+    ) {
+      setCurrentReview(0)
+    }
+  }, [sliderReviews.length, currentReview])
 
   return (
     <section
@@ -136,7 +210,16 @@ export default function Reviews({ reviews, setReviews }) {
                 {/* Review Card */}
                 <div
                   key={`${sliderReviews[currentReview].name}-${currentReview}`}
-                  className="rounded-2xl border border-slate-200/80 bg-white p-5 shadow-sm transition-all duration-500 ease-in-out"
+
+                  onTouchStart={handleTouchStart}
+                  onTouchMove={handleTouchMove}
+                  onTouchEnd={handleTouchEnd}
+
+                  onMouseDown={handleMouseDown}
+                  onMouseUp={handleMouseUp}
+                  onMouseLeave={handleMouseLeave}
+
+                  className="cursor-grab select-none rounded-2xl border border-slate-200/80 bg-white p-5 shadow-sm transition-all duration-500 ease-in-out active:cursor-grabbing touch-pan-y"
                 >
                   <div className="flex items-start justify-between gap-3">
 
@@ -167,7 +250,8 @@ export default function Reviews({ reviews, setReviews }) {
                             key={n}
                             size={13}
                             fill={
-                              n < sliderReviews[currentReview].rating
+                              n <
+                              sliderReviews[currentReview].rating
                                 ? 'currentColor'
                                 : 'none'
                             }
@@ -183,15 +267,16 @@ export default function Reviews({ reviews, setReviews }) {
                   </p>
                 </div>
 
-                {/* Navigation Buttons */}
+                {/* ================= NAVIGATION ================= */}
                 {sliderReviews.length > 1 && (
                   <div className="mt-4 flex items-center justify-between">
 
+                    {/* Previous Arrow - Invisible */}
                     <button
                       type="button"
                       onClick={previousReview}
                       aria-label="Previous review"
-                      className="grid h-10 w-10 place-items-center rounded-full border border-slate-200 bg-white text-slate-600 shadow-sm transition hover:border-brand hover:text-brand"
+                      className="grid h-10 w-10 place-items-center rounded-full opacity-0 pointer-events-none"
                     >
                       <ChevronLeft size={19} />
                     </button>
@@ -213,11 +298,12 @@ export default function Reviews({ reviews, setReviews }) {
                       ))}
                     </div>
 
+                    {/* Next Arrow - Invisible */}
                     <button
                       type="button"
                       onClick={nextReview}
                       aria-label="Next review"
-                      className="grid h-10 w-10 place-items-center rounded-full border border-slate-200 bg-white text-slate-600 shadow-sm transition hover:border-brand hover:text-brand"
+                      className="grid h-10 w-10 place-items-center rounded-full opacity-0 pointer-events-none"
                     >
                       <ChevronRight size={19} />
                     </button>
@@ -358,3 +444,4 @@ export default function Reviews({ reviews, setReviews }) {
     </section>
   )
 }
+
