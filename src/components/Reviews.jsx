@@ -1,6 +1,6 @@
 
 import React, { useEffect, useState } from 'react'
-import { Send, Star } from 'lucide-react'
+import { Send, Star, ChevronLeft, ChevronRight } from 'lucide-react'
 import SectionTitle from './SectionTitle.jsx'
 
 const STORAGE_KEY = 'location-saman-delivery-reviews'
@@ -14,6 +14,7 @@ export default function Reviews({ reviews, setReviews }) {
   })
 
   const [notice, setNotice] = useState('')
+  const [currentReview, setCurrentReview] = useState(0)
 
   // LocalStorage থেকে review load
   useEffect(() => {
@@ -44,6 +45,7 @@ export default function Reviews({ reviews, setReviews }) {
     }
   }, [reviews])
 
+  // Review submit
   const submit = e => {
     e.preventDefault()
 
@@ -59,6 +61,9 @@ export default function Reviews({ reviews, setReviews }) {
 
     setReviews(updatedReviews)
 
+    // নতুন review যোগ হলে প্রথম review দেখাবে
+    setCurrentReview(0)
+
     setForm({
       name: '',
       location: '',
@@ -67,11 +72,53 @@ export default function Reviews({ reviews, setReviews }) {
     })
 
     setNotice('রিভিউটি এই পেজে যোগ হয়েছে। ধন্যবাদ!')
+
+    setTimeout(() => {
+      setNotice('')
+    }, 3000)
   }
 
+  // সর্বোচ্চ 4টি review slider-এ দেখাবে
+  const sliderReviews = reviews.slice(0, 4)
+
+  // Next review
+  const nextReview = () => {
+    if (sliderReviews.length === 0) return
+
+    setCurrentReview(prev =>
+      prev === sliderReviews.length - 1 ? 0 : prev + 1
+    )
+  }
+
+  // Previous review
+  const previousReview = () => {
+    if (sliderReviews.length === 0) return
+
+    setCurrentReview(prev =>
+      prev === 0 ? sliderReviews.length - 1 : prev - 1
+    )
+  }
+
+  // Auto slider
+  useEffect(() => {
+    if (sliderReviews.length <= 1) return
+
+    const interval = setInterval(() => {
+      setCurrentReview(prev =>
+        prev === sliderReviews.length - 1 ? 0 : prev + 1
+      )
+    }, 5000)
+
+    return () => clearInterval(interval)
+  }, [sliderReviews.length])
+
   return (
-    <section id="reviews" className="section-space bg-[#f7fbf9]">
+    <section
+      id="reviews"
+      className="section-space bg-[#f7fbf9]"
+    >
       <div className="container-width">
+
         <SectionTitle
           eyebrow="কাস্টমারদের মতামত"
           title="কাস্টমার রিভিউ"
@@ -80,56 +127,116 @@ export default function Reviews({ reviews, setReviews }) {
 
         <div className="grid items-start gap-6 lg:grid-cols-[1.15fr_.85fr]">
 
-          <div className="grid gap-4 sm:grid-cols-2">
-            {reviews.slice(0, 4).map((review, i) => (
-              <article
-                key={`${review.name}-${i}`}
-                className="rounded-2xl border border-slate-200/80 bg-white p-5 shadow-sm"
-              >
-                <div className="flex items-start justify-between gap-3">
-                  <div className="flex items-center gap-3">
+          {/* ================= REVIEW SLIDER ================= */}
+          <div className="relative">
 
-                    <div className="grid h-11 w-11 place-items-center rounded-full bg-brand-light font-bold text-brand">
-                      {review.name.slice(0, 1)}
+            {sliderReviews.length > 0 ? (
+              <div className="relative overflow-hidden">
+
+                {/* Review Card */}
+                <div
+                  key={`${sliderReviews[currentReview].name}-${currentReview}`}
+                  className="rounded-2xl border border-slate-200/80 bg-white p-5 shadow-sm transition-all duration-500 ease-in-out"
+                >
+                  <div className="flex items-start justify-between gap-3">
+
+                    <div className="flex items-center gap-3">
+
+                      <div className="grid h-11 w-11 place-items-center rounded-full bg-brand-light font-bold text-brand">
+                        {sliderReviews[currentReview].name.slice(0, 1)}
+                      </div>
+
+                      <div>
+                        <h3 className="font-bold text-slate-800">
+                          {sliderReviews[currentReview].name}
+                        </h3>
+
+                        <p className="font-bangla mt-0.5 text-xs text-slate-400">
+                          {sliderReviews[currentReview].location || 'কাস্টমার'}
+                        </p>
+                      </div>
+
                     </div>
 
-                    <div>
-                      <h3 className="font-bold text-slate-800">
-                        {review.name}
-                      </h3>
-
-                      <p className="font-bangla mt-0.5 text-xs text-slate-400">
-                        {review.location || 'কাস্টমার'}
-                      </p>
+                    {/* Stars */}
+                    <div className="flex gap-0.5 text-amber-400">
+                      {Array.from(
+                        { length: 5 },
+                        (_, n) => (
+                          <Star
+                            key={n}
+                            size={13}
+                            fill={
+                              n < sliderReviews[currentReview].rating
+                                ? 'currentColor'
+                                : 'none'
+                            }
+                          />
+                        )
+                      )}
                     </div>
 
                   </div>
 
-                  <div className="flex gap-0.5 text-amber-400">
-                    {Array.from(
-                      { length: 5 },
-                      (_, n) => (
-                        <Star
-                          key={n}
-                          size={13}
-                          fill={
-                            n < review.rating
-                              ? 'currentColor'
-                              : 'none'
-                          }
-                        />
-                      )
-                    )}
-                  </div>
+                  <p className="font-bangla mt-4 min-h-[84px] text-sm leading-7 text-slate-600">
+                    “{sliderReviews[currentReview].text}”
+                  </p>
                 </div>
 
-                <p className="font-bangla mt-4 text-sm leading-7 text-slate-600">
-                  “{review.text}”
+                {/* Navigation Buttons */}
+                {sliderReviews.length > 1 && (
+                  <div className="mt-4 flex items-center justify-between">
+
+                    <button
+                      type="button"
+                      onClick={previousReview}
+                      aria-label="Previous review"
+                      className="grid h-10 w-10 place-items-center rounded-full border border-slate-200 bg-white text-slate-600 shadow-sm transition hover:border-brand hover:text-brand"
+                    >
+                      <ChevronLeft size={19} />
+                    </button>
+
+                    {/* Dots */}
+                    <div className="flex items-center gap-1.5">
+                      {sliderReviews.map((_, index) => (
+                        <button
+                          key={index}
+                          type="button"
+                          onClick={() => setCurrentReview(index)}
+                          aria-label={`Review ${index + 1}`}
+                          className={`h-2 rounded-full transition-all duration-300 ${
+                            currentReview === index
+                              ? 'w-6 bg-brand'
+                              : 'w-2 bg-slate-300 hover:bg-slate-400'
+                          }`}
+                        />
+                      ))}
+                    </div>
+
+                    <button
+                      type="button"
+                      onClick={nextReview}
+                      aria-label="Next review"
+                      className="grid h-10 w-10 place-items-center rounded-full border border-slate-200 bg-white text-slate-600 shadow-sm transition hover:border-brand hover:text-brand"
+                    >
+                      <ChevronRight size={19} />
+                    </button>
+
+                  </div>
+                )}
+
+              </div>
+            ) : (
+              <div className="rounded-2xl border border-slate-200/80 bg-white p-5 text-center shadow-sm">
+                <p className="font-bangla text-sm text-slate-400">
+                  এখনো কোনো রিভিউ নেই।
                 </p>
-              </article>
-            ))}
+              </div>
+            )}
+
           </div>
 
+          {/* ================= REVIEW FORM ================= */}
           <form
             onSubmit={submit}
             className="rounded-3xl border border-brand/10 bg-white p-5 shadow-soft sm:p-7"
@@ -251,4 +358,3 @@ export default function Reviews({ reviews, setReviews }) {
     </section>
   )
 }
-
