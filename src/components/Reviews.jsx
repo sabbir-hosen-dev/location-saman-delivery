@@ -169,7 +169,7 @@ export default function Reviews({ reviews, setReviews }) {
                     location: e.target.value,
                   })
                 }
-                placeholder="আপনার জেলা (ঐচ্ছিক)"
+                placeholder="আপনার লোকেসন"
                 className="rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none focus:border-brand"
               />
 
