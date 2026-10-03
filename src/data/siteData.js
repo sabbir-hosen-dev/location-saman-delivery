@@ -1,6 +1,10 @@
 // নিজের WhatsApp Business নম্বর বসাও: দেশের কোডসহ, + বা space ছাড়া।
 export const WHATSAPP_NUMBER = '+8801943993180';
 
+{/* <img src="https://i.ibb.co.com/NnmXTgD3/cann.jpg" alt="cann" border="0">
+<img src="https://i.ibb.co.com/8DYW5PqL/can.jpg" alt="can" border="0">
+<img src="https://i.ibb.co.com/gMVXVH3K/c.jpg" alt="c" border="0"></img> */}
+
 export const products = [
   {
     id: 1,
@@ -18,7 +22,7 @@ export const products = [
     price: '৫০',
     tag: 'নতুন',
     priceTitle: 'করে ১ পিস',
-    image: 'https://i.ibb.co.com/qLBW6kRR/images.jpg',
+    image: 'https://i.ibb.co.com/gMVXVH3K/c.jpg',
   },
   {
     id: 3,
