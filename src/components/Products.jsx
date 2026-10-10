@@ -45,12 +45,14 @@ export default function Products() {
                     <p className="text-2xl font-extrabold text-brand">
                       {money(product.price)}
                     </p>
-                    <span className="text-[13px] md:mt-[10px]">{product.priceTitle}</span>
+                    <span className="text-[13px] md:mt-[10px]">
+                      {product.priceTitle}
+                    </span>
                   </div>
 
                   <WhatsAppButton
                     className="rounded-xl px-3.5 py-2.5 text-xs"
-                    message={`আসসালামু আলাইকুম, আমি Location Saman Delivery থেকে "${product.name}" অর্ডার করতে চাই। দাম: ${money(product.price)}। অর্ডারের নিয়ম জানাবেন।`}>
+                    message={`আসসালামু আলাইকুম, আমি Saman Delivery থেকে "${product.name}" অর্ডার করতে চাই। দাম: ${money(product.price)}। অর্ডারের নিয়ম জানাবেন।`}>
                     অর্ডার করুন
                   </WhatsAppButton>
                 </div>

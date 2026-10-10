@@ -9,7 +9,7 @@ export default function Banner() {
       <div className="container-width flex flex-col items-start justify-between gap-5 sm:flex-row sm:items-center">
         <div>
           <p className="font-bangla text-sm font-semibold text-emerald-100">
-            Location Saman Delivery
+            Saman Delivery
           </p>
           <h2 className="mt-2 font-bangla text-2xl font-bold sm:text-3xl">
             অর্ডার করতে সাহায্য লাগবে?

@@ -205,7 +205,7 @@ export default function Contact() {
       setSent(true);
       setShowSuccess(true);
 
-      const whatsappMessage = `Location Saman Delivery — সামান না পাওয়া / কম পাওয়ার অভিযোগ
+      const whatsappMessage = `Saman Delivery — সামান না পাওয়া / কম পাওয়ার অভিযোগ
 
 আপনার সামান আমাদের দায়িত্ব।
 

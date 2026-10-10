@@ -12,7 +12,7 @@ import FixedSeftyNotice from './components/FixedSeftyNotice.jsx';
 
 export default function App() {
   const [reviews, setReviews] = useState(initialReviews);
-  const whatsappLink = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent('আসসালামু আলাইকুম, Location Saman Delivery থেকে জানতে চাই।')}`;
+  const whatsappLink = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent('আসসালামু আলাইকুম, Saman Delivery থেকে জানতে চাই।')}`;
 
   return (
     <div className="min-h-screen bg-white">
@@ -22,11 +22,9 @@ export default function App() {
         <Contact />
         <Products />
         <Reviews reviews={reviews} setReviews={setReviews} />
-        
+
         <OrderRules />
         <FixedSeftyNotice />
-   
-        
       </main>
       <Footer />
       <a

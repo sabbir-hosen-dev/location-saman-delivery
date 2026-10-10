@@ -48,8 +48,7 @@ export default function Footer() {
       <div className="border-t border-white/10">
         <div className="container-width flex flex-col justify-between gap-2 py-4 font-bangla text-xs text-slate-400 sm:flex-row">
           <span>
-            © {new Date().getFullYear()} Location Saman Delivery. সর্বস্বত্ব
-            সংরক্ষিত।
+            © {new Date().getFullYear()} Saman Delivery. সর্বস্বত্ব সংরক্ষিত।
           </span>
           <span>আপনার আস্থাই আমাদের অনুপ্রেরণা।</span>
         </div>

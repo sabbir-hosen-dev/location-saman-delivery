@@ -1,4 +1,4 @@
-# Location Saman Delivery — React + Tailwind CSS
+# Saman Delivery — React + Tailwind CSS
 
 ## Run
 
@@ -34,4 +34,5 @@ npm run build
 3. Replace the sample reviews with real customer reviews.
 4. Card and bKash buttons only open WhatsApp with a prepared message. No payment gateway is integrated.
 5. Reviews are frontend-only and will not persist after refresh. A backend/database is needed for permanent storage.
+
 # location-saman-delivery

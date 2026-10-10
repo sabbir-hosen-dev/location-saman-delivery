@@ -18,13 +18,13 @@ export default function Navbar() {
         <a
           href="#home"
           className="flex shrink-0 items-center gap-2.5"
-          aria-label="Location Saman Delivery home">
+          aria-label="Saman Delivery home">
           <span className="grid h-10 w-10 place-items-center rounded-xl bg-brand text-white">
             <MapPin size={22} />
           </span>
           <span>
             <span className="block text-lg font-extrabold leading-tight tracking-tight text-slate-900">
-              লোকেশনে সামান <span className="text-brand"> ডেলিভারি</span>
+              সামান <span className="text-brand"> ডেলিভারি</span>
             </span>
             <span className="font-bangla text-xs text-slate-500">
               সহজ অর্ডার, নির্ভরযোগ্য সার্ভিস

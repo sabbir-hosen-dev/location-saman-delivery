@@ -4,7 +4,7 @@ import { WHATSAPP_NUMBER } from '../data/siteData.js';
 
 export default function WhatsAppButton({
   children = 'WhatsApp-এ অর্ডার করুন',
-  message = 'আসসালামু আলাইকুম, Location Saman Delivery থেকে অর্ডার করতে চাই।',
+  message = 'আসসালামু আলাইকুম, Saman Delivery থেকে অর্ডার করতে চাই।',
   className = '',
 }) {
   const href = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
