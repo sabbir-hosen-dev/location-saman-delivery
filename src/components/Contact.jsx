@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react'
 import {
   Clock3,
@@ -9,34 +8,55 @@ import {
   X,
   Loader2,
   CheckCircle2,
+  AlertTriangle,
 } from 'lucide-react'
 import { WHATSAPP_NUMBER } from '../data/siteData.js'
 
-// Google Apps Script Web App URL এখানে বসাবে
+// Google Apps Script Web App URL
 const GOOGLE_SHEET_API =
   'https://script.google.com/macros/s/AKfycbxWsWRyI_cNMqUW8iiWZrHXR6buQBMY9nRoqsIk_ob3jmTM-HU2VJbVKS7cxvX54ulX/exec'
 
-export default function Contact() {
-  const [form, setForm] = useState({
-    name: '',
-    phone: '',
-    payment: '',
-    location: '',
-    message: '',
-  })
+const PRODUCT_OPTIONS = ['ক্যান্ডি', 'চিনি', 'পাতা']
 
+const INITIAL_FORM = {
+  name: '',
+  phone: '',
+  riderPhone: '',
+  products: [],
+  quantity: '',
+  location: '',
+  payment: '',
+  paidAmount: '',
+  message: '',
+}
+
+export default function Contact() {
+  const [form, setForm] = useState(INITIAL_FORM)
   const [image, setImage] = useState(null)
   const [preview, setPreview] = useState('')
   const [uploading, setUploading] = useState(false)
   const [sending, setSending] = useState(false)
   const [sent, setSent] = useState(false)
   const [error, setError] = useState('')
+  const [showSuccess, setShowSuccess] = useState(false)
 
   const handleChange = e => {
-    setForm({
-      ...form,
-      [e.target.name]: e.target.value,
-    })
+    const { name, value } = e.target
+
+    setForm(prev => ({
+      ...prev,
+      [name]: value,
+    }))
+  }
+
+  const handleProductChange = product => {
+    setForm(prev => ({
+      ...prev,
+      products: prev.products.includes(product)
+        ? prev.products.filter(item => item !== product)
+        : [...prev.products, product],
+    }))
+    setError('')
   }
 
   const handleImageChange = e => {
@@ -45,16 +65,17 @@ export default function Contact() {
     if (!file) return
 
     setError('')
+    setSent(false)
 
-    // শুধু image allow
     if (!file.type.startsWith('image/')) {
-      setError('শুধু JPG, PNG বা WebP image upload করুন।')
+      setError('শুধু JPG, PNG অথবা WebP ছবি আপলোড করুন।')
+      e.target.value = ''
       return
     }
 
-    // 5MB limit
     if (file.size > 5 * 1024 * 1024) {
-      setError('Image সর্বোচ্চ 5MB হতে পারবে।')
+      setError('ছবির সাইজ সর্বোচ্চ 5MB হতে পারবে।')
+      e.target.value = ''
       return
     }
 
@@ -72,6 +93,10 @@ export default function Contact() {
   const removeImage = () => {
     setImage(null)
     setPreview('')
+
+    const input = document.getElementById('payment-screenshot')
+
+    if (input) input.value = ''
   }
 
   const submit = async e => {
@@ -79,84 +104,93 @@ export default function Contact() {
 
     setError('')
     setSent(false)
+    setShowSuccess(false)
 
-    if (!form.payment) {
-      setError('Payment মাধ্যম নির্বাচন করুন।')
+    if (form.products.length === 0) {
+      setError('আপনি কোন সামান দিয়েছিলেন, অন্তত একটি নির্বাচন করুন।')
       return
     }
 
     if (!image) {
-      setError('Payment screenshot upload করুন।')
+      setError('Payment Screenshot আপলোড করুন।')
       return
     }
 
-    if (!GOOGLE_SHEET_API || GOOGLE_SHEET_API.includes('YOUR_')) {
+    if (!GOOGLE_SHEET_API) {
       setError('Google Sheet API URL সেট করা হয়নি।')
       return
     }
+
+    let imageBase64
 
     try {
       setSending(true)
       setUploading(true)
 
-      // Image কে base64 করা
-      const imageBase64 = await fileToBase64(image)
+      imageBase64 = await fileToBase64(image)
 
-      // Google Apps Script-এ পাঠানো
-      // Apps Script ImgBB-তে image upload করবে
-      // এবং Sheet-এ সব data save করবে
       const response = await fetch(GOOGLE_SHEET_API, {
         method: 'POST',
         headers: {
           'Content-Type': 'text/plain;charset=utf-8',
         },
         body: JSON.stringify({
-          name: form.name,
-          phone: form.phone,
+          name: form.name.trim(),
+          phone: form.phone.trim(),
+          riderPhone: form.riderPhone.trim(),
+          products: form.products,
+          quantity: form.quantity.trim(),
+          location: form.location.trim(),
           payment: form.payment,
-          location: form.location,
-          message: form.message,
+          paidAmount: form.paidAmount.trim(),
+          message: form.message.trim(),
           image: imageBase64,
           imageName: image.name,
           imageType: image.type,
         }),
       })
 
-      setUploading(false)
-
       const result = await response.json()
 
-      if (!result.success) {
-        throw new Error(result.message || 'Submit failed')
+      if (!response.ok || !result.success) {
+        throw new Error(
+          result.message || 'তথ্য সংরক্ষণ করা যায়নি। আবার চেষ্টা করুন।'
+        )
       }
 
+      setUploading(false)
       setSent(true)
+      setShowSuccess(true)
 
-      // WhatsApp message
-      const whatsappMessage = `Location Saman Delivery — অভিযোগ/ফিডব্যাক
+      const whatsappMessage = `Location Saman Delivery — সামান না পাওয়া / কম পাওয়ার অভিযোগ
 
-নাম: ${form.name}
-ফোন: ${form.phone}
-Payment: ${form.payment}
+আপনার সামান আমাদের দায়িত্ব।
+
+গ্রাহকের নাম: ${form.name}
+গ্রাহকের ফোন: ${form.phone}
+রাইডারের ফোন: ${form.riderPhone}
+সামানের ধরন: ${form.products.join(', ')}
+সামানের পরিমাণ: ${form.quantity}
 লোকেশন: ${form.location}
-অভিযোগ: ${form.message}
+Payment মাধ্যম: ${form.payment}
+পরিশোধিত টাকা: ${form.paidAmount}
+
+গ্রাহকের অভিযোগ / মতামত:
+${form.message}
 
 Payment Screenshot:
-${result.imageUrl || 'Image uploaded successfully'}`
+${result.imageUrl || 'Google Sheet-এ সংরক্ষিত হয়েছে।'}
 
-      // Form reset
-      setForm({
-        name: '',
-        phone: '',
-        payment: '',
-        location: '',
-        message: '',
-      })
+অনুগ্রহ করে অভিযোগটি যাচাই করে প্রয়োজনীয় ব্যবস্থা নিন।`
 
+      setForm({ ...INITIAL_FORM })
       setImage(null)
       setPreview('')
 
-      // WhatsApp open
+      const fileInput = document.getElementById('payment-screenshot')
+      if (fileInput) fileInput.value = ''
+
+      // WhatsApp message open
       window.open(
         `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(
           whatsappMessage
@@ -167,38 +201,78 @@ ${result.imageUrl || 'Image uploaded successfully'}`
     } catch (err) {
       console.error(err)
 
-      setUploading(false)
       setError(
-        err.message ||
-          'তথ্য পাঠাতে সমস্যা হয়েছে। আবার চেষ্টা করুন।'
+        err.message || 'তথ্য পাঠাতে সমস্যা হয়েছে। আবার চেষ্টা করুন।'
       )
     } finally {
       setSending(false)
+      setUploading(false)
     }
   }
 
   return (
     <section id="contact" className="section-space">
-      <div className="container-width grid gap-10 lg:grid-cols-[.85fr_1.15fr] lg:items-center">
+      {/* TOP SUCCESS POPUP */}
+      {showSuccess && (
+        <div className="fixed inset-x-0 top-4 z-[100] flex justify-center px-4">
+          <div
+            role="status"
+            aria-live="polite"
+            className="flex w-full max-w-md items-start gap-3 rounded-2xl border border-green-200 bg-white p-4 shadow-2xl"
+          >
+            <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-green-100 text-green-600">
+              <CheckCircle2 size={23} />
+            </span>
 
+            <div className="min-w-0 flex-1">
+              <p className="font-bangla font-bold text-slate-900">
+                অভিযোগ সফলভাবে জমা হয়েছে!
+              </p>
+
+              <p className="font-bangla mt-1 text-sm leading-6 text-slate-600">
+                আপনার তথ্য সংরক্ষণ করা হয়েছে। আমরা আপনার সঙ্গে যোগাযোগ করব।
+              </p>
+            </div>
+
+            <button
+              type="button"
+              onClick={() => setShowSuccess(false)}
+              aria-label="সফলতার বার্তা বন্ধ করুন"
+              className="shrink-0 rounded-lg p-1 text-slate-400 hover:bg-slate-100 hover:text-slate-700"
+            >
+              <X size={19} />
+            </button>
+          </div>
+        </div>
+      )}
+
+      <div className="container-width grid gap-10 lg:grid-cols-[.85fr_1.15fr] lg:items-center">
         {/* LEFT SIDE — DESIGN SAME */}
         <div>
           <span className="section-kicker font-bangla">
-            আমরা শুনতে প্রস্তুত
+            আপনার পাশে আমরা
           </span>
 
           <h2 className="font-bangla mt-3 text-3xl font-bold leading-tight text-slate-900 sm:text-4xl">
-            আপনার কোনো অভিযোগ বা পরামর্শ আছে?
+            সামান না পেলে বা কম পেলে এই ফর্মটি পূরণ করুন
           </h2>
 
           <p className="font-bangla mt-4 leading-8 text-slate-600">
-            আপনার সমস্যা বা মতামত আমাদের জানান। ফর্মটি জমা দিলে
-            তথ্য সংরক্ষণ করা হবে এবং WhatsApp Business-এ মেসেজ
-            তৈরি হবে।
+            আপনার সামান না পেলে বা পরিমাণে কম পেলে নিচের ফর্মটি পূরণ করে
+            অভিযোগ জানান। আমরা আপনার সঙ্গে যোগাযোগ করব এবং বিষয়টি যাচাই
+            করে প্রয়োজনীয় ব্যবস্থা নেব।
+          </p>
+
+          <p className="font-bangla mt-3 rounded-xl bg-brand-light p-4 font-bold leading-7 text-slate-800">
+            আপনার সামান আমাদের দায়িত্ব।
+          </p>
+
+          <p className="font-bangla mt-3 leading-7 text-slate-600">
+            রাইডারের আচরণ খারাপ হলে, সামান না দিলে অথবা কম দিলে অবশ্যই
+            অভিযোগ করুন। আপনার অভিযোগ যাচাই করে যথাযথ ব্যবস্থা নেওয়া হবে।
           </p>
 
           <div className="mt-7 space-y-4">
-
             <div className="flex gap-3">
               <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-brand-light text-brand">
                 <MessageCircle size={19} />
@@ -208,9 +282,8 @@ ${result.imageUrl || 'Image uploaded successfully'}`
                 <p className="font-bangla font-bold text-slate-800">
                   WhatsApp Business
                 </p>
-
                 <p className="font-bangla mt-1 text-sm text-slate-500">
-                  অর্ডার, অভিযোগ ও সহায়তার জন্য
+                  অভিযোগ ও সহায়তার জন্য
                 </p>
               </div>
             </div>
@@ -224,7 +297,6 @@ ${result.imageUrl || 'Image uploaded successfully'}`
                 <p className="font-bangla font-bold text-slate-800">
                   সাপোর্ট টাইম
                 </p>
-
                 <p className="font-bangla mt-1 text-sm text-slate-500">
                   সাপোর্টের সময় WhatsApp-এ নিশ্চিত করুন।
                 </p>
@@ -238,15 +310,13 @@ ${result.imageUrl || 'Image uploaded successfully'}`
 
               <div>
                 <p className="font-bangla font-bold text-slate-800">
-                  সহজ যোগাযোগ
+                  আপনার অভিযোগ আমাদের কাছে গুরুত্বপূর্ণ
                 </p>
-
                 <p className="font-bangla mt-1 text-sm text-slate-500">
-                  আপনার তথ্য পাঠানোর আগে যাচাই করে নিন।
+                  সঠিক তথ্য দিয়ে ফর্মটি পূরণ করুন।
                 </p>
               </div>
             </div>
-
           </div>
         </div>
 
@@ -256,16 +326,15 @@ ${result.imageUrl || 'Image uploaded successfully'}`
           className="rounded-3xl border border-slate-200 bg-white p-5 shadow-soft sm:p-8"
         >
           <h3 className="font-bangla text-xl font-bold text-slate-900">
-            অভিযোগ / ফিডব্যাক বক্স
+            সামান না পাওয়া / কম পাওয়ার অভিযোগ
           </h3>
 
           <p className="font-bangla mt-1 text-sm text-slate-500">
-            * চিহ্নিত তথ্যগুলো পূরণ করুন।
+            * সবগুলো তথ্য পূরণ করা বাধ্যতামূলক।
           </p>
 
-          {/* NAME + PHONE */}
+          {/* CUSTOMER NAME + PHONE */}
           <div className="mt-5 grid gap-4 sm:grid-cols-2">
-
             <label className="font-bangla text-sm font-semibold text-slate-700">
               আপনার নাম *
 
@@ -274,49 +343,87 @@ ${result.imageUrl || 'Image uploaded successfully'}`
                 name="name"
                 value={form.name}
                 onChange={handleChange}
+                autoComplete="name"
                 className="mt-2 block w-full rounded-xl border border-slate-200 px-4 py-3 font-normal outline-none focus:border-brand"
-                placeholder="নাম লিখুন"
+                placeholder="আপনার নাম লিখুন"
               />
             </label>
 
             <label className="font-bangla text-sm font-semibold text-slate-700">
-              মোবাইল নম্বর *
+              আপনার ফোন নম্বর *
 
               <input
                 required
+                type="tel"
                 name="phone"
                 value={form.phone}
                 onChange={handleChange}
+                autoComplete="tel"
                 className="mt-2 block w-full rounded-xl border border-slate-200 px-4 py-3 font-normal outline-none focus:border-brand"
-                placeholder="01XXXXXXXXX"
+                placeholder="ফোন নম্বর লিখুন"
               />
             </label>
-
           </div>
 
-          {/* PAYMENT */}
+          {/* RIDER PHONE */}
           <label className="font-bangla mt-4 block text-sm font-semibold text-slate-700">
-            Payment করেছেন *
+            রাইডারের ফোন নম্বর *
 
-            <select
+            <input
               required
-              name="payment"
-              value={form.payment}
+              type="tel"
+              name="riderPhone"
+              value={form.riderPhone}
               onChange={handleChange}
-              className="mt-2 block w-full rounded-xl border border-slate-200 bg-white px-4 py-3 font-normal outline-none focus:border-brand"
-            >
-              <option value="">
-                Payment মাধ্যম নির্বাচন করুন
-              </option>
+              className="mt-2 block w-full rounded-xl border border-slate-200 px-4 py-3 font-normal outline-none focus:border-brand"
+              placeholder="রাইডারের ফোন নম্বর লিখুন"
+            />
+          </label>
 
-              <option value="Card">
-                Card
-              </option>
+          {/* PRODUCTS */}
+          <fieldset className="font-bangla mt-4 rounded-xl border border-slate-200 p-4">
+            <legend className="px-1 text-sm font-semibold text-slate-700">
+              আপনি কী সামান দিয়েছিলেন? *
+            </legend>
 
-              <option value="bKash">
-                bKash
-              </option>
-            </select>
+            <p className="mb-3 text-xs font-normal text-slate-500">
+              একাধিক সামান নির্বাচন করতে পারবেন।
+            </p>
+
+            <div className="grid gap-3 sm:grid-cols-3">
+              {PRODUCT_OPTIONS.map(product => (
+                <label
+                  key={product}
+                  className={`flex cursor-pointer items-center gap-2 rounded-xl border p-3 text-sm transition ${
+                    form.products.includes(product)
+                      ? 'border-brand bg-brand-light text-slate-900'
+                      : 'border-slate-200 text-slate-700 hover:border-brand'
+                  }`}
+                >
+                  <input
+                    type="checkbox"
+                    checked={form.products.includes(product)}
+                    onChange={() => handleProductChange(product)}
+                    className="h-4 w-4 accent-current"
+                  />
+                  {product}
+                </label>
+              ))}
+            </div>
+          </fieldset>
+
+          {/* QUANTITY */}
+          <label className="font-bangla mt-4 block text-sm font-semibold text-slate-700">
+            সামানের পরিমাণ কত ছিল? *
+
+            <input
+              required
+              name="quantity"
+              value={form.quantity}
+              onChange={handleChange}
+              className="mt-2 block w-full rounded-xl border border-slate-200 px-4 py-3 font-normal outline-none focus:border-brand"
+              placeholder="যেমন: ২ প্যাকেট চিনি, ৫টি ক্যান্ডি"
+            />
           </label>
 
           {/* LOCATION */}
@@ -329,11 +436,45 @@ ${result.imageUrl || 'Image uploaded successfully'}`
               value={form.location}
               onChange={handleChange}
               className="mt-2 block w-full rounded-xl border border-slate-200 px-4 py-3 font-normal outline-none focus:border-brand"
-              placeholder="আপনার লোকেশন / ঠিকানা লিখুন"
+              placeholder="আপনার এলাকার নাম / সম্পূর্ণ ঠিকানা"
             />
           </label>
 
-          {/* SCREENSHOT */}
+          {/* PAYMENT METHOD */}
+          <label className="font-bangla mt-4 block text-sm font-semibold text-slate-700">
+            Payment মাধ্যম *
+
+            <select
+              required
+              name="payment"
+              value={form.payment}
+              onChange={handleChange}
+              className="mt-2 block w-full rounded-xl border border-slate-200 bg-white px-4 py-3 font-normal outline-none focus:border-brand"
+            >
+              <option value="">Payment মাধ্যম নির্বাচন করুন</option>
+              <option value="Card">Card</option>
+              <option value="bKash">bKash</option>
+            </select>
+          </label>
+
+          {/* PAID AMOUNT */}
+          <label className="font-bangla mt-4 block text-sm font-semibold text-slate-700">
+            কত টাকা দিয়েছেন? *
+
+            <input
+              required
+              type="number"
+              min="0"
+              step="any"
+              name="paidAmount"
+              value={form.paidAmount}
+              onChange={handleChange}
+              className="mt-2 block w-full rounded-xl border border-slate-200 px-4 py-3 font-normal outline-none focus:border-brand"
+              placeholder="টাকার পরিমাণ লিখুন"
+            />
+          </label>
+
+          {/* PAYMENT SCREENSHOT */}
           <div className="font-bangla mt-4 block text-sm font-semibold text-slate-700">
             Payment Screenshot *
 
@@ -347,7 +488,6 @@ ${result.imageUrl || 'Image uploaded successfully'}`
                     size={25}
                     className="animate-spin text-brand"
                   />
-
                   <span className="mt-2 text-sm text-slate-500">
                     Screenshot upload হচ্ছে...
                   </span>
@@ -360,26 +500,19 @@ ${result.imageUrl || 'Image uploaded successfully'}`
                     className="mx-auto max-h-48 rounded-xl object-contain"
                   />
 
-                  <button
-                    type="button"
-                    onClick={removeImage}
-                    className="absolute right-1 top-1 grid h-8 w-8 place-items-center rounded-full bg-white text-slate-700 shadow"
-                  >
-                    <X size={16} />
-                  </button>
+                  <span className="mt-2 block text-xs font-normal text-slate-500">
+                    অন্য ছবি দিতে চাইলে এখানে ক্লিক করুন।
+                  </span>
                 </div>
               ) : (
                 <>
-                  <Upload
-                    size={25}
-                    className="text-slate-400"
-                  />
+                  <Upload size={25} className="text-slate-400" />
 
                   <span className="mt-2 text-sm text-slate-500">
                     Screenshot Upload করুন
                   </span>
 
-                  <span className="mt-1 text-xs text-slate-400">
+                  <span className="mt-1 text-xs font-normal text-slate-400">
                     JPG, PNG অথবা WebP — সর্বোচ্চ 5MB
                   </span>
                 </>
@@ -388,44 +521,66 @@ ${result.imageUrl || 'Image uploaded successfully'}`
               <input
                 id="payment-screenshot"
                 type="file"
-                accept="image/*"
+                accept="image/jpeg,image/png,image/webp"
+                required={!image}
                 onChange={handleImageChange}
                 className="hidden"
               />
             </label>
+
+            {image && (
+              <div className="mt-2 flex items-center justify-between gap-3">
+                <span className="break-all text-xs font-normal text-slate-500">
+                  {image.name}
+                </span>
+
+                <button
+                  type="button"
+                  onClick={removeImage}
+                  className="inline-flex shrink-0 items-center gap-1 rounded-lg px-2 py-1 text-xs text-red-500 hover:bg-red-50"
+                >
+                  <X size={14} />
+                  ছবি সরান
+                </button>
+              </div>
+            )}
           </div>
 
-          {/* MESSAGE */}
+          {/* COMPLAINT / FEEDBACK */}
           <label className="font-bangla mt-4 block text-sm font-semibold text-slate-700">
-            অভিযোগ বা পরামর্শ লিখুন *
+            আপনার মতামত বা অভিযোগ *
 
             <textarea
               required
               name="message"
-              rows="4"
+              rows={4}
               value={form.message}
               onChange={handleChange}
               className="mt-2 block w-full rounded-xl border border-slate-200 px-4 py-3 font-normal outline-none focus:border-brand"
-              placeholder="বিস্তারিত লিখুন..."
+              placeholder="কী সমস্যা হয়েছে বিস্তারিত লিখুন..."
             />
           </label>
 
           {/* ERROR */}
           {error && (
-            <p className="font-bangla mt-3 text-sm text-red-500">
+            <p
+              role="alert"
+              className="font-bangla mt-3 flex items-start gap-2 text-sm text-red-500"
+            >
+              <AlertTriangle size={17} className="mt-0.5 shrink-0" />
               {error}
             </p>
           )}
 
-          {/* SUCCESS */}
+          {/* SUCCESS INLINE */}
           {sent && (
-            <p className="font-bangla mt-3 flex items-center gap-2 text-sm text-brand">
+            <p className="font-bangla mt-3 flex items-center gap-2 text-sm text-green-600">
               <CheckCircle2 size={17} />
               আপনার অভিযোগ সফলভাবে সংরক্ষণ হয়েছে।
             </p>
           )}
 
-          {/* BUTTON */}
+          {/* SUBMIT BUTTON */}
           <button
             type="submit"
             disabled={sending}
@@ -433,21 +588,17 @@ ${result.imageUrl || 'Image uploaded successfully'}`
           >
             {sending ? (
               <>
-                <Loader2
-                  size={16}
-                  className="animate-spin"
-                />
+                <Loader2 size={16} className="animate-spin" />
                 পাঠানো হচ্ছে...
               </>
             ) : (
               <>
                 <Send size={16} />
-                 পাঠান
+                অভিযোগ পাঠান
               </>
             )}
           </button>
         </form>
-
       </div>
     </section>
   )
@@ -463,15 +614,25 @@ function fileToBase64(file) {
     reader.onload = () => {
       const result = reader.result
 
-      // data:image/png;base64,XXXX
+      if (typeof result !== 'string') {
+        reject(new Error('ছবি পড়তে সমস্যা হয়েছে।'))
+        return
+      }
+
       const base64 = result.split(',')[1]
+
+      if (!base64) {
+        reject(new Error('ছবিটি সঠিকভাবে পড়া যায়নি।'))
+        return
+      }
 
       resolve(base64)
     }
 
-    reader.onerror = reject
+    reader.onerror = () => {
+      reject(new Error('ছবি পড়তে সমস্যা হয়েছে। আবার চেষ্টা করুন।'))
+    }
 
     reader.readAsDataURL(file)
   })
 }
-
