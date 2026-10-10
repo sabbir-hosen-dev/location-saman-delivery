@@ -16,7 +16,7 @@ import { WHATSAPP_NUMBER } from '../data/siteData.js';
 
 // Google Apps Script Web App URL
 const GOOGLE_SHEET_API =
-  'https://script.google.com/macros/s/AKfycbxXfpdGPjRqL2do8kiH7FYc_uaGJoHZ4oQMRjUtB_PCsC9YqXRBfE4ukrSmAhqkQHgE/exec';
+  'https://script.google.com/macros/s/AKfycbwB3grv24OiGr0JjsTYkCVr7xvpKWrEgMAFx1uFBL9zcrBbx4oJyeJBfVUJT89mX13a/exec';
 
 const PRODUCT_OPTIONS = ['ক্যান্ডি', 'চিনি', 'পাতা'];
 
@@ -177,13 +177,21 @@ export default function Contact() {
         body: JSON.stringify(payload),
       });
 
+      // Read the raw response first
+      const responseText = await response.text();
       let result;
 
       try {
-        result = await response.json();
+        result = JSON.parse(responseText);
       } catch {
+        console.error(
+          'Google Apps Script returned non-JSON:',
+          response.status,
+          responseText.slice(0, 500)
+        );
+
         throw new Error(
-          'সার্ভার থেকে সঠিক Response পাওয়া যায়নি। Apps Script পরীক্ষা করুন।'
+          'Google Apps Script থেকে JSON পাওয়া যায়নি। Deployment URL, access permission এবং latest deployment পরীক্ষা করুন।'
         );
       }
 
