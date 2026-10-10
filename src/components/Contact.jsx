@@ -16,7 +16,7 @@ import { WHATSAPP_NUMBER } from '../data/siteData.js';
 
 // Google Apps Script Web App URL
 const GOOGLE_SHEET_API =
-  'https://script.google.com/macros/s/AKfycbxvV82BltoHu5ZHpIqejN0XOduNhQJuBxL8-GtLc3B4WlCNRG3uiCvNDgFl7agGfnSq/exec';
+  'https://script.google.com/macros/s/AKfycbzRML0qyxL3piwdMbkfcd5EfC_bsj5nXraywdmFGltGveBz0jpLQs6T9bjavqDaOTQW/exec';
 
 const PRODUCT_OPTIONS = ['ক্যান্ডি', 'চিনি', 'পাতা'];
 
@@ -467,7 +467,7 @@ ${result.imageUrl || 'Google Sheet-এ সংরক্ষিত হয়েছে�
               value={form.quantity}
               onChange={handleChange}
               className="mt-2 block w-full rounded-xl border border-slate-200 px-4 py-3 font-normal outline-none focus:border-brand"
-              placeholder="যেমন: ২ প্যাকেট চিনি, ৫টি ক্যান্ডি"
+              placeholder="যেমন: ২ গ্রাম চিনি, 10 পিস ক্যান্ডি"
             />
           </label>
 
@@ -480,7 +480,7 @@ ${result.imageUrl || 'Google Sheet-এ সংরক্ষিত হয়েছে�
               value={form.location}
               onChange={handleChange}
               className="mt-2 block w-full rounded-xl border border-slate-200 px-4 py-3 font-normal outline-none focus:border-brand"
-              placeholder="আপনার এলাকার নাম / সম্পূর্ণ ঠিকানা"
+              placeholder="আপনার লোকেশন / সম্পূর্ণ ঠিকানা"
             />
           </label>
 
