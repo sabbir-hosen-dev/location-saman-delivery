@@ -16,7 +16,7 @@ import { WHATSAPP_NUMBER } from '../data/siteData.js';
 
 // Google Apps Script Web App URL
 const GOOGLE_SHEET_API =
-  'https://script.google.com/macros/s/AKfycbwB3grv24OiGr0JjsTYkCVr7xvpKWrEgMAFx1uFBL9zcrBbx4oJyeJBfVUJT89mX13a/exec';
+  'https://script.google.com/macros/s/AKfycbxvV82BltoHu5ZHpIqejN0XOduNhQJuBxL8-GtLc3B4WlCNRG3uiCvNDgFl7agGfnSq/exec';
 
 const PRODUCT_OPTIONS = ['ক্যান্ডি', 'চিনি', 'পাতা'];
 
