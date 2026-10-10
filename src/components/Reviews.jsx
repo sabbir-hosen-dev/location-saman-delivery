@@ -68,7 +68,7 @@ export default function Reviews({ reviews, setReviews }) {
 
     setForm({
       name: '',
-      location: '',
+      // location: '',
       rating: '5',
       text: '',
     })
@@ -234,9 +234,9 @@ export default function Reviews({ reviews, setReviews }) {
                           {sliderReviews[currentReview].name}
                         </h3>
 
-                        <p className="font-bangla mt-0.5 text-xs text-slate-400">
+                        {/* <p className="font-bangla mt-0.5 text-xs text-slate-400">
                           {sliderReviews[currentReview].location || 'কাস্টমার'}
-                        </p>
+                        </p> */}
                       </div>
 
                     </div>
@@ -354,7 +354,7 @@ export default function Reviews({ reviews, setReviews }) {
                 className="rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none focus:border-brand"
               />
 
-              <input
+              {/* <input
                 value={form.location}
                 onChange={e =>
                   setForm({
@@ -364,7 +364,7 @@ export default function Reviews({ reviews, setReviews }) {
                 }
                 placeholder="আপনার লোকেসন"
                 className="rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none focus:border-brand"
-              />
+              /> */}
 
             </div>
 

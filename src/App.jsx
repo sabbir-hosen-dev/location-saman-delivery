@@ -19,9 +19,10 @@ export default function App() {
       <Navbar />
       <main>
         <Home />
+        <Contact />
         <Products />
         <Reviews reviews={reviews} setReviews={setReviews} />
-        <Contact />
+        
         <OrderRules />
         <FixedSeftyNotice />
    
