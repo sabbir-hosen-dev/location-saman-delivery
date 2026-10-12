@@ -649,7 +649,7 @@ ${result.imageUrl || 'Google Sheet-এ সংরক্ষিত হয়েছে�
 
           onSubmit={submit}
 
-          className="rounded-3xl border border-slate-200 bg-white p-5 shadow-soft sm:p-8">
+          className="rounded-3xl border border-slate-200 bg-[#fffdf523] p-5 shadow-xl sm:p-8">
 
           <h3 className="font-bangla text-xl font-bold text-slate-900">
 
