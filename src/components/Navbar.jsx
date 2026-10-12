@@ -42,20 +42,27 @@ export default function Navbar() {
             </a>
           ))}
         </nav>
+        
         <div className="hidden items-center gap-3 sm:flex">
           <LanguageSwitcher />
           <WhatsAppButton className="rounded-xl px-4 py-2.5 text-xs" />
         </div>
-        <button
-          onClick={() => setOpen(!open)}
-          className="grid h-10 w-10 place-items-center rounded-xl border border-slate-200 text-slate-700 md:hidden"
-          aria-label="মেনু খুলুন">
-          {open ? <X size={21} /> : <Menu size={21} />}
-        </button>
+
+        <div className=" flex gap-2 justify-center items-center">
+          <div className="md:px-2 md:py-2 px-1 py2 md:hidden">
+            <LanguageSwitcher />
+          </div>
+
+          <button
+            onClick={() => setOpen(!open)}
+            className="grid h-10 w-10 place-items-center rounded-xl border border-slate-200 text-slate-700 md:hidden"
+            aria-label="মেনু খুলুন">
+            {open ? <X size={21} /> : <Menu size={21} />}
+          </button>
+        </div>
       </div>
       {open && (
         <nav className="container-width grid gap-1 border-t border-slate-100 py-3 md:hidden">
-          <div className="px-3 py-2"><LanguageSwitcher /></div>
           {links.map(([label, href]) => (
             <a
               onClick={() => setOpen(false)}
