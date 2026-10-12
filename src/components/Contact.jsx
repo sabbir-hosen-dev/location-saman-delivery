@@ -32,6 +32,8 @@ const GOOGLE_SHEET_API =
 
   'https://script.google.com/macros/s/AKfycbzRML0qyxL3piwdMbkfcd5EfC_bsj5nXraywdmFGltGveBz0jpLQs6T9bjavqDaOTQW/exec';
 
+
+
 const PRODUCT_OPTIONS = ['ক্যান্ডি', 'চিনি', 'পাতা'];
 
 const INITIAL_FORM = {
@@ -519,7 +521,7 @@ ${result.imageUrl || 'Google Sheet-এ সংরক্ষিত হয়েছে�
 
       )}
 
-      <div className="container-width grid gap-10 lg:grid-cols-[.85fr_1.15fr] lg:items-center">
+      <div className="container-width grid gap-10 lg:grid-cols-[.85fr_1.15fr] ">
 
         {/* LEFT SIDE — DESIGN SAME */}
 

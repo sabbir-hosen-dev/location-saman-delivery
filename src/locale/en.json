@@ -1,0 +1,47 @@
+{
+  "brand": "Location Saman Delivery",
+  "nav": {
+    "home": "Home",
+    "products": "Products",
+    "reviews": "Reviews",
+    "contact": "Contact",
+    "orderRules": "Order Rules"
+  },
+  "hero": {
+    "title": "Your Goods, Our Responsibility",
+    "description": "Easy Ordering, Reliable Service",
+    "orderNow": "Order Now",
+    "learnMore": "Learn More"
+  },
+  "products": {
+    "title": "Our Products",
+    "orderNow": "Order via WhatsApp"
+  },
+  "reviews": {
+    "title": "Customer Reviews",
+    "name": "Your Name",
+    "message": "Write your review",
+    "submit": "Submit Review"
+  },
+  "contact": {
+    "title": "Complaints & Feedback",
+    "name": "Your Name",
+    "phone": "Phone Number",
+    "order": "Order Number",
+    "message": "Write your complaint or feedback",
+    "submit": "Submit"
+  },
+  "orderRules": {
+    "title": "Order Rules"
+  },
+  "notice": "Your Goods, Our Responsibility",
+  "footer": {
+    "rights": "All rights reserved"
+  },
+  "common": {
+    "loading": "Loading...",
+    "success": "Completed successfully",
+    "cancel": "Cancel",
+    "close": "Close"
+  }
+}

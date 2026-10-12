@@ -36,3 +36,9 @@ npm run build
 5. Reviews are frontend-only and will not persist after refresh. A backend/database is needed for permanent storage.
 
 # location-saman-delivery
+
+## Language support
+
+The website UI supports Bangla, English, and Arabic. On a first visit, the site tries to detect the visitor's country using IP-based country lookup: Bangladesh → Bangla; Saudi Arabia, Kuwait, and Qatar → Arabic; Malaysia, UAE, Oman, and Bahrain → English. If country detection is unavailable, the browser language is used as a fallback. Visitors can always choose a language using the selector in the navbar; that choice is saved in the browser and takes priority on later visits.
+
+The original layout, product count, review behavior, WhatsApp links, and complaint form/API settings have been left in place. Arabic switches the page direction to RTL and uses an Arabic-capable font.

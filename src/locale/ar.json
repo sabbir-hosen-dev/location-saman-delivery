@@ -1,0 +1,11 @@
+{
+  "brand": "Location Saman Delivery",
+  "nav": { "home": "الرئيسية", "products": "المنتجات", "reviews": "التقييمات", "contact": "اتصل بنا", "orderRules": "قواعد الطلب" },
+  "hero": { "title": "سلعك، مسؤوليتنا", "description": "طلب سهل وخدمة موثوقة", "orderNow": "اطلب الآن", "learnMore": "اعرف المزيد" },
+  "products": { "title": "منتجاتنا", "orderNow": "اطلب عبر واتساب" },
+  "reviews": { "title": "تقييمات العملاء", "name": "اسمك", "message": "اكتب رأيك", "submit": "إرسال التقييم" },
+  "contact": { "title": "الشكاوى والملاحظات", "name": "اسمك", "phone": "رقم الهاتف", "order": "رقم الطلب", "message": "اكتب شكواك أو ملاحظاتك", "submit": "إرسال" },
+  "orderRules": { "title": "قواعد الطلب" },
+  "notice": "سلعك، مسؤوليتنا", "footer": { "rights": "جميع الحقوق محفوظة" },
+  "common": { "loading": "جارٍ التحميل...", "success": "اكتملت العملية بنجاح", "cancel": "إلغاء", "close": "إغلاق" }
+}

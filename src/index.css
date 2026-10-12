@@ -35,3 +35,5 @@ button, input, textarea, select { font: inherit; }
   animation: productSlide 0.6s ease-out;
 }
 
+
+html[lang='ar'] .font-bangla { font-family: 'Noto Sans Arabic', Inter, sans-serif; }

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { MapPin, Menu, X } from 'lucide-react';
 import WhatsAppButton from './WhatsAppButton.jsx';
+import LanguageSwitcher from './LanguageSwitcher.jsx';
 
 const links = [
   ['হোম', '#home'],
@@ -24,7 +25,7 @@ export default function Navbar() {
           </span>
           <span>
             <span className="block text-lg font-extrabold leading-tight tracking-tight text-slate-900">
-              সামান <span className="text-brand"> ডেলিভারি</span>
+              Saman <span className="text-brand">Delivery</span>
             </span>
             <span className="font-bangla text-xs text-slate-500">
               সহজ অর্ডার, নির্ভরযোগ্য সার্ভিস
@@ -41,7 +42,8 @@ export default function Navbar() {
             </a>
           ))}
         </nav>
-        <div className="hidden sm:block">
+        <div className="hidden items-center gap-3 sm:flex">
+          <LanguageSwitcher />
           <WhatsAppButton className="rounded-xl px-4 py-2.5 text-xs" />
         </div>
         <button
@@ -53,6 +55,7 @@ export default function Navbar() {
       </div>
       {open && (
         <nav className="container-width grid gap-1 border-t border-slate-100 py-3 md:hidden">
+          <div className="px-3 py-2"><LanguageSwitcher /></div>
           {links.map(([label, href]) => (
             <a
               onClick={() => setOpen(false)}
