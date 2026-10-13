@@ -1,14 +1,16 @@
 // নিজের WhatsApp Business নম্বর বসাও: দেশের কোডসহ, + বা space ছাড়া।
 export const WHATSAPP_NUMBER = '+8801943993180';
 
-{/* <img src="https://i.ibb.co.com/NnmXTgD3/cann.jpg" alt="cann" border="0">
+{
+  /* <img src="https://i.ibb.co.com/NnmXTgD3/cann.jpg" alt="cann" border="0">
 <img src="https://i.ibb.co.com/8DYW5PqL/can.jpg" alt="can" border="0">
-<img src="https://i.ibb.co.com/gMVXVH3K/c.jpg" alt="c" border="0"></img> */}
+<img src="https://i.ibb.co.com/gMVXVH3K/c.jpg" alt="c" border="0"></img> */
+}
 
 export const products = [
   {
     id: 1,
-    name: 'চিনি',
+    name: 'চিনি ',
     description: 'সব চিনি মিষ্টি না রে পাগলা.!!',
     price: '৩০০',
     priceTitle: 'করে ১ গ্রাম',
@@ -17,7 +19,7 @@ export const products = [
   },
   {
     id: 2,
-    name: 'কেন্ডি',
+    name: 'কেন্ডি ',
     description: 'যে নামাইছে লেয়ার সেই জানে কেন্ডির কি পাওয়ার...R7 ',
     price: '৫০',
     tag: 'নতুন',
@@ -26,7 +28,7 @@ export const products = [
   },
   {
     id: 3,
-    name: 'পাতা',
+    name: 'পাতা  ',
     description: 'দুঃখ ভুলালানোর ঔষধ, পিনিক',
     price: '২০০',
     tag: 'ট্রেন্ডিং',
@@ -35,7 +37,6 @@ export const products = [
       'https://i.ibb.co.com/vpmZPZg/Whats-App-Image-2026-10-03-at-1-33-38-AM.jpg',
   },
 ];
-
 
 export const initialReviews = [
   {
@@ -115,6 +116,5 @@ export const initialReviews = [
     text: 'সামান ঠিকভাবে পেয়েছি। সার্ভিস ভালো, সামনে আবারও অর্ডার করব।',
   },
 ];
-
 
 export const money = amount => `৳${amount.toLocaleString('en-US')}`;
