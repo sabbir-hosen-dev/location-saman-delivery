@@ -118,9 +118,30 @@ export default function WhatsAppButton() {
                   <strong className="block">
                     আপনার আস্থাই আমাদের অনুপ্রেরণা।
                   </strong>
-                  আপনার ও রাইডারের গোপনীয়তা রক্ষা করে লোকেশনে সামান 
-                  দেওয়া হয়।
+                  আপনার ও রাইডারের গোপনীয়তা রক্ষা করে লোকেশনে সামান দেওয়া হয়।
                 </p>
+              </div>
+
+              {/* Payment Notice */}
+              <div className="mt-3 flex items-center gap-2"></div>
+
+              {/* Payment Notice */}
+              <div className="mt-3 flex items-center gap-3 rounded-xl border border-pink-100 bg-pink-50 p-3 text-sm text-gray-700">
+                <img
+                  src="/bkash.png"
+                  alt="bKash"
+                  className="h-9 w-9 shrink-0 rounded-md object-contain"
+                />
+
+                <div className="min-w-0">
+                  <strong className="block text-sm leading-5 text-gray-900">
+                    নিরাপদ পেমেন্ট
+                  </strong>
+
+                  <p className="mt-1 text-xs font-bold leading-5 text-gray-700">
+                    আপনার সর্বোচ্চ নিরাপত্তার জন্য বিকাশের মাধ্যমে পেমেন্ট করুন।
+                  </p>
+                </div>
               </div>
 
               {/* Order Form */}
@@ -148,7 +169,7 @@ export default function WhatsAppButton() {
                         />
 
                         {/* ইমোজি শুধু Modal-এর অপশনে থাকবে */}
-                        <span className='font-bold'>
+                        <span className="font-bold">
                           {product}
                           {product === 'ক্যান্ডি' && '🍬 '}
                           {product === 'চিনি' && '🧊 '}
