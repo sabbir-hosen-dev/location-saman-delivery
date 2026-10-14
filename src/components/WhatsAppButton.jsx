@@ -45,13 +45,10 @@ export default function WhatsAppButton() {
     if (selectedProducts.length === 0 || !location.trim()) return;
 
     const message = [
-      'আসসালামু আলাইকুম, Location Saman Delivery।',
+      'আসসালামু আলাইকুম, Saman Delivery থেকে অর্ডার করতে চাই। ',
       '',
-      'আমার অর্ডারের বিস্তারিত:',
-      `আমার প্রয়োজন: ${selectedProducts.join(', ')}`,
-      `আমার লোকেশন: ${location.trim()}`,
-      '',
-      'পেমেন্ট করার পর অবশ্যই স্ক্রিনশট পাঠাব। সামান যেখানে রাখতে হবে, সেই জায়গার ছবি বা ভিডিও পাঠাব।',
+      `লোকেশন: ${location.trim()}, লাগবে: ${selectedProducts.join(', ')} আমাকে বিস্তারিত জানাবেন।`  `,
+      ,
     ].join('\n');
 
     const phone = String(WHATSAPP_NUMBER || '').replace(/\D/g, '');
