@@ -39,35 +39,35 @@ export default function WhatsAppButton() {
     );
   };
 
-const handleOrder = event => {
-  event.preventDefault();
+  const handleOrder = event => {
+    event.preventDefault();
 
-  if (selectedProducts.length === 0 || !location.trim()) return;
+    if (selectedProducts.length === 0 || !location.trim()) return;
 
-  const message = [
-    'আসসালামু আলাইকুম, Saman Delivery থেকে অর্ডার করতে চাই।',
-    '',
-    `লোকেশন: ${location.trim()}`,
-    `যা লাগবে: ${selectedProducts.join(', ')}`,
-    '',
-    'আমাকে বিস্তারিত জানাবেন।',
-  ].join('\n');
+    const message = [
+      'আসসালামু আলাইকুম, Saman Delivery থেকে অর্ডার করতে চাই।',
+      '',
+      `লোকেশন: ${location.trim()}`,
+      `যা লাগবে: ${selectedProducts.join(', ')}`,
+      '',
+      'আমাকে বিস্তারিত জানাবেন।',
+    ].join('\n');
 
-  const phone = String(WHATSAPP_NUMBER || '').replace(/\D/g, '');
+    const phone = String(WHATSAPP_NUMBER || '').replace(/\D/g, '');
 
-  if (!phone) {
-    window.alert(
-      'WhatsApp নম্বর সেট করা নেই। data/siteData.js ফাইলে WHATSAPP_NUMBER চেক করুন।'
+    if (!phone) {
+      window.alert(
+        'WhatsApp নম্বর সেট করা নেই। data/siteData.js ফাইলে WHATSAPP_NUMBER চেক করুন।'
+      );
+      return;
+    }
+
+    window.open(
+      `https://wa.me/${phone}?text=${encodeURIComponent(message)}`,
+      '_blank',
+      'noopener,noreferrer'
     );
-    return;
-  }
-
-  window.open(
-    `https://wa.me/${phone}?text=${encodeURIComponent(message)}`,
-    '_blank',
-    'noopener,noreferrer'
-  );
-};
+  };
 
   return (
     <>
@@ -127,10 +127,10 @@ const handleOrder = event => {
               {/* Payment Notice */}
               <div className="mt-3 flex items-center gap-3 rounded-xl border border-pink-100 bg-pink-50 p-3 text-sm text-gray-700">
                 <img
-                  src="/bkash.png"
-                  alt="bKash"
+                  src="https://i.ibb.co.com/tTshJjmc/bkash.png"
+                  alt="bkash"
                   className="h-9 w-9 shrink-0 rounded-md object-contain"
-                />
+                  border="0"></img>
 
                 <div className="min-w-0">
                   <strong className="block text-sm leading-5 text-gray-900">
