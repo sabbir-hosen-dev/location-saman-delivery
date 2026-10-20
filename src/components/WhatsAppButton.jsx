@@ -117,7 +117,13 @@ export default function WhatsAppButton() {
                   <strong className="block">
                     আপনার আস্থাই আমাদের অনুপ্রেরণা।
                   </strong>
-                  আপনার ও রাইডারের গোপনীয়তা রক্ষা করে লোকেশনে সামান দেওয়া হয়।
+                  <span className='text-[12px]'>
+                    {' '}
+                    আপনার ও রাইডারের গোপনীয়তা আমাদের অগ্রাধিকার। নিরাপত্তার
+                    স্বার্থে হাতে হাতে নয়, শুধুমাত্র নির্ধারিত লোকেশনে সামান
+                    দেওয়া হয়।
+                  </span>
+                  
                 </p>
               </div>
 
@@ -125,7 +131,7 @@ export default function WhatsAppButton() {
               <div className="mt-3 flex items-center gap-2"></div>
 
               {/* Payment Notice */}
-              <div className="mt-3 flex items-center gap-3 rounded-xl border border-pink-100 bg-pink-50 p-3 text-sm text-gray-700">
+              {/* <div className="mt-3 flex items-center gap-3 rounded-xl border border-pink-100 bg-pink-50 p-3 text-sm text-gray-700">
                 <img
                   src="https://i.ibb.co.com/tTshJjmc/bkash.png"
                   alt="bkash"
@@ -141,7 +147,7 @@ export default function WhatsAppButton() {
                     আপনার সর্বোচ্চ নিরাপত্তার জন্য বিকাশের মাধ্যমে পেমেন্ট করুন।
                   </p>
                 </div>
-              </div>
+              </div> */}
 
               {/* Order Form */}
               <form onSubmit={handleOrder} className="mt-5 space-y-5">
@@ -210,6 +216,7 @@ export default function WhatsAppButton() {
 
                 {/* Instructions */}
                 <p className="text-center text-sm leading-6 text-gray-600">
+                  <strong>সামান আপনার, দায়িত্ব আমাদের।</strong> <br />
                   পেমেন্ট করার পর অবশ্যই স্ক্রিনশট দিবেন। <br />
                   সামান যেখানে রাখব, সেই জায়গার ছবি বা ভিডিও করে দিবেন।
                 </p>
