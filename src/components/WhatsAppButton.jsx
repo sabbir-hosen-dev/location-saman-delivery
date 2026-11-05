@@ -40,35 +40,35 @@ export default function WhatsAppButton() {
   };
 
   const handleOrder = event => {
-    event.preventDefault();
+  event.preventDefault();
 
-    if (selectedProducts.length === 0 || !location.trim()) return;
+  if (selectedProducts.length === 0 || !location.trim()) return;
 
-    const message = [
-      'আসসালামু আলাইকুম, Saman Delivery থেকে অর্ডার করতে চাই।',
-      '',
-      `লোকেশন: ${location.trim()}`,
-      `যা লাগবে: ${selectedProducts.join(', ')}`,
-      '',
-      'আমাকে বিস্তারিত জানাবেন।',
-    ].join('\n');
+  const message = [
+    'আসসালামু আলাইকুম, Saman Delivery থেকে অর্ডার করতে চাই।',
+    '',
+    `লোকেশন: ${location.trim()}`,
+    `যা লাগবে: ${selectedProducts.join(', ')}`,
+    '',
+    'আমাকে বিস্তারিত জানাবেন।',
+  ].join('\n');
 
-    const phone = String(WHATSAPP_NUMBER || '').replace(/\D/g, '');
+  const numbers = [
+    '+8801909302437',
+    '+8801943993180',
+  ];
 
-    if (!phone) {
-      window.alert(
-        'WhatsApp নম্বর সেট করা নেই। data/siteData.js ফাইলে WHATSAPP_NUMBER চেক করুন।'
-      );
-      return;
-    }
+  // Random WhatsApp number
+  const randomIndex = Math.floor(Math.random() * numbers.length);
+  const phone = numbers[randomIndex].replace(/\D/g, '');
 
-    window.open(
-      `https://wa.me/${phone}?text=${encodeURIComponent(message)}`,
-      '_blank',
-      'noopener,noreferrer'
-    );
-  };
+  window.open(
+    `https://wa.me/${phone}?text=${encodeURIComponent(message)}`,
+    '_blank'
+  );
 
+  setIsOpen(false);
+};
   return (
     <>
       {/* WhatsApp Order Button */}

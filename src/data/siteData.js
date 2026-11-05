@@ -1,5 +1,8 @@
 // নিজের WhatsApp Business নম্বর বসাও: দেশের কোডসহ, + বা space ছাড়া।
-export const WHATSAPP_NUMBER = '+8801943993180';
+export const WHATSAPP_NUMBERS = [
+  '+8801909302437',
+  '+8801943993180',
+];
 
 {
   /* <img src="https://i.ibb.co.com/NnmXTgD3/cann.jpg" alt="cann" border="0">
